@@ -14,6 +14,7 @@ import {
   type AppTool,
   type ConnectedIntegration,
 } from "@/lib/api";
+import { connectFailureMessage } from "@/lib/connect-errors";
 import { loadConnected } from "@/lib/integrations-cache";
 import { usePipedreamConnect, type ConnectOptions } from "@/lib/pipedream";
 
@@ -35,6 +36,8 @@ export default function DashboardIntegrationConfigure() {
   const [adding, setAdding] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  // Why a connect failed, e.g. Shopify refusing the key; stays until dismissed.
+  const [connectError, setConnectError] = useState<string | null>(null);
 
   const [tools, setTools] = useState<AppTool[]>([]);
   const [toolsLoading, setToolsLoading] = useState(true);
@@ -129,11 +132,13 @@ export default function DashboardIntegrationConfigure() {
       if (!ready) return;
       setAdding(true);
       try {
+        setConnectError(null);
         await connect(appSlug, options);
         await load(true);
         setToast(`Successfully connected your ${app?.appName ?? appSlug} account!`);
       } catch (error) {
         console.error("Failed to connect account", error);
+        setConnectError(connectFailureMessage(app?.appName ?? appSlug, error));
       } finally {
         setAdding(false);
       }
@@ -366,6 +371,14 @@ export default function DashboardIntegrationConfigure() {
         }}
       />
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+      {connectError && (
+        <Toast
+          tone="error"
+          duration={0}
+          message={connectError}
+          onClose={() => setConnectError(null)}
+        />
+      )}
     </>
   );
 }

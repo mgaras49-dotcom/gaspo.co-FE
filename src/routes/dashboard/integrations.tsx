@@ -14,6 +14,7 @@ import {
   type CatalogApp,
   type ConnectedIntegration,
 } from "@/lib/api";
+import { connectFailureMessage } from "@/lib/connect-errors";
 import {
   getCachedConnected,
   getCatalogVisibleCount,
@@ -86,6 +87,8 @@ export default function DashboardIntegrations() {
   );
   const [busySlug, setBusySlug] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  // Why a connect failed, e.g. Shopify refusing the key; stays until dismissed.
+  const [connectError, setConnectError] = useState<string | null>(null);
   // The app awaiting access-level/nickname selection before its connect popup.
   const [pendingApp, setPendingApp] = useState<CatalogApp | null>(null);
 
@@ -288,11 +291,13 @@ export default function DashboardIntegrations() {
       if (!ready) return;
       setBusySlug(app.nameSlug);
       try {
+        setConnectError(null);
         await connect(app.nameSlug, options);
         await refreshConnected(true);
         setToast(`Successfully connected your ${app.name} account!`);
       } catch (error) {
         console.error(`Failed to connect ${app.name}`, error);
+        setConnectError(connectFailureMessage(app.name, error));
       } finally {
         setBusySlug(null);
       }
@@ -481,6 +486,14 @@ export default function DashboardIntegrations() {
         />
       )}
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+      {connectError && (
+        <Toast
+          tone="error"
+          duration={0}
+          message={connectError}
+          onClose={() => setConnectError(null)}
+        />
+      )}
     </>
   );
 }
