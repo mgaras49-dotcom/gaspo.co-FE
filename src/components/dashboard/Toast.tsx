@@ -1,15 +1,18 @@
 import { useEffect } from "react";
-import { CheckCircle2, X } from "lucide-react";
+import { AlertCircle, CheckCircle2, X } from "lucide-react";
 
 type ToastProps = {
   message: string;
   onClose: () => void;
   /** Auto-dismiss after this many ms. Set 0 to disable. */
   duration?: number;
+  /** An error keeps its own icon, and should be given time to be read. */
+  tone?: "success" | "error";
 };
 
-/** Minimal success toast pinned to the bottom-right of the viewport. */
-export function Toast({ message, onClose, duration = 4000 }: ToastProps) {
+/** Minimal toast pinned to the bottom-right of the viewport. */
+export function Toast({ message, onClose, duration = 4000, tone = "success" }: ToastProps) {
+  const Icon = tone === "error" ? AlertCircle : CheckCircle2;
   useEffect(() => {
     if (!duration) return;
     const id = window.setTimeout(onClose, duration);
@@ -17,8 +20,15 @@ export function Toast({ message, onClose, duration = 4000 }: ToastProps) {
   }, [duration, onClose]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 shadow-lg">
-      <CheckCircle2 className="size-5 shrink-0 text-highlight" strokeWidth={2} aria-hidden />
+    <div
+      role={tone === "error" ? "alert" : "status"}
+      className="fixed bottom-6 right-6 z-50 flex max-w-md items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 shadow-lg"
+    >
+      <Icon
+        className={`size-5 shrink-0 ${tone === "error" ? "text-destructive" : "text-highlight"}`}
+        strokeWidth={2}
+        aria-hidden
+      />
       <p className="text-sm font-medium text-foreground">{message}</p>
       <button
         type="button"
