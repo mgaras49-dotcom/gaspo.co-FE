@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { PageMeta } from "@/components/PageMeta";
 import { SLACK_CREATE_ACCOUNT_URL, startSlackLogin } from "@/lib/auth";
 import microsoftTeamsIcon from "@/assets/images/microsoft-teams.svg";
-import {
-  CasaTier3Badge,
-  CcpaBadge,
-  GdprBadge,
-} from "@/components/icons/compliance-badges";
+import { CasaTier3Badge, CcpaBadge, GdprBadge } from "@/components/icons/compliance-badges";
 
 const testimonials = [
   {
@@ -72,7 +68,7 @@ const complianceBadges = [
 ];
 
 const authButtonClass =
-  "inline-flex w-full min-h-10 cursor-pointer items-center justify-center gap-2 rounded-[6px] border border-[#d9d9d9] bg-transparent px-4 py-2 text-sm font-medium text-foreground outline-0 transition-[background-color,border-color,transform] hover:bg-accent active:scale-[0.98]";
+  "inline-flex w-full min-h-10 cursor-pointer items-center justify-center gap-2 rounded-[6px] border border-[#d9d9d9] bg-transparent px-4 py-2 text-sm font-medium text-foreground outline-0 transition-[background-color,border-color,transform] hover:bg-accent active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
 
 export default function GetStarted() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -91,7 +87,7 @@ export default function GetStarted() {
     <div className="flex max-md:min-h-screen flex-col bg-white md:h-screen md:flex-row-reverse">
       <PageMeta
         title="Try Gaspo for free — $100 credits included"
-        description="Sign up for Gaspo with Slack or Microsoft Teams. No credit card required."
+        description="Sign up for Gaspo with Slack. No credit card required."
       />
 
       {/* Sign-up panel */}
@@ -115,9 +111,10 @@ export default function GetStarted() {
                     <SlackIcon />
                     Continue with Slack
                   </button>
-                  <button type="button" className={authButtonClass}>
+                  {/* Gaspo runs on Slack only; Teams is not built yet, so this button only says so. */}
+                  <button type="button" className={authButtonClass} disabled>
                     <img src={microsoftTeamsIcon} alt="" className="size-5 shrink-0" aria-hidden />
-                    Continue with Microsoft Teams
+                    Microsoft Teams: coming soon
                   </button>
                   <p className="text-center text-xs text-muted-foreground">
                     Signing up needs a Slack account. New to Slack?{" "}

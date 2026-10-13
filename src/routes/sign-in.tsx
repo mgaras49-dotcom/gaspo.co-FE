@@ -5,15 +5,12 @@ import gaspoAvatar from "@/assets/images/gaspo-marketplace-avatar.svg";
 import microsoftTeamsIcon from "@/assets/images/microsoft-teams.svg";
 
 const authButtonClass =
-  "inline-flex w-full min-h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground outline-0 transition-[background-color,border-color,transform] hover:bg-accent active:scale-[0.98]";
+  "inline-flex w-full min-h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-border bg-transparent px-4 py-2 text-sm font-medium text-foreground outline-0 transition-[background-color,border-color,transform] hover:bg-accent active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
 
 export default function SignIn() {
   return (
     <div className="relative flex min-h-screen flex-col bg-white">
-      <PageMeta
-        title="Sign in to Gaspo"
-        description="Sign in to Gaspo with Slack or join the Microsoft Teams waitlist."
-      />
+      <PageMeta title="Sign in to Gaspo" description="Sign in to Gaspo with Slack." />
 
       <div className="absolute left-5 top-5 z-10">
         <GaspoLogo />
@@ -38,9 +35,10 @@ export default function SignIn() {
               <SlackIcon />
               Continue with Slack
             </button>
-            <button type="button" className={authButtonClass}>
+            {/* Gaspo runs on Slack only; Teams is not built yet, so this button only says so. */}
+            <button type="button" className={authButtonClass} disabled>
               <img src={microsoftTeamsIcon} alt="" className="size-5 shrink-0" aria-hidden />
-              Join Microsoft Teams waitlist
+              Microsoft Teams: coming soon
             </button>
             <p className="text-center text-xs text-muted-foreground">
               Signing in needs a Slack account. New to Slack?{" "}
