@@ -20,7 +20,9 @@ const NOTES: Record<string, ConnectNote> = {
     body:
       "Shopify only lets outside tools in through a custom app you create for your store. In the " +
       "Shopify Dev Dashboard, create an app, paste in the redirect URL shown on the next screen, " +
-      "choose what Gaspo may read (orders, products, customers) and install it on your store. " +
+      "choose what Gaspo may read (orders, products, customers) and install it on your store. To " +
+      "let Gaspo create or edit products and store pages, also give it write access to products " +
+      "and content. " +
       'Then enter your shop ID (the "acme-co" in acme-co.myshopify.com) and the app\'s Client ID ' +
       "and Client Secret.",
     link: { label: "Shopify's guide to custom apps", href: SHOPIFY_CUSTOM_APP_HELP },
