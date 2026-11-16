@@ -148,8 +148,14 @@ export default function DashboardIntegrations() {
     if (connectedFlag === "meta") {
       setToast("Successfully connected your Meta Ads account!");
       void refreshConnected(true);
+    } else if (errorFlag === "meta_permissions") {
+      // The backend refused a token without the ad permissions. The user can fix
+      // this one themselves, so say how; the plain `meta` case needs us.
+      setConnectError(
+        "Meta signed you in but did not grant Gaspo access to your ads, so nothing was connected. Try again and keep every permission ticked. If the dialog never offered ad permissions, your Facebook account needs a role on the Gaspo Meta app.",
+      );
     } else if (errorFlag === "meta") {
-      setToast("Could not connect Meta Ads. Please try again.");
+      setConnectError("Could not connect Meta Ads. Please try again.");
     }
     window.history.replaceState({}, "", window.location.pathname);
   }, [refreshConnected]);
