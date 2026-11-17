@@ -148,6 +148,8 @@ export default function DashboardIntegrations() {
     if (connectedFlag === "meta") {
       setToast("Successfully connected your Meta Ads account!");
       void refreshConnected(true);
+    } else if (errorFlag === "meta_cancelled") {
+      setToast("Meta login cancelled. Nothing was changed.");
     } else if (errorFlag === "meta_permissions") {
       // The backend refused a token without the ad permissions. The user can fix
       // this one themselves, so say how; the plain `meta` case needs us.
